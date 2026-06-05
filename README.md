@@ -99,3 +99,11 @@ No external dependencies — pure Rust.
 ## License
 
 MIT
+
+## See Also
+- **ternary-lighthouse** — related
+- **ternary-beacon** — related
+- **ternary-observatory** — related
+- **ternary-compass** — related
+- **ternary-navigator** — related
+
