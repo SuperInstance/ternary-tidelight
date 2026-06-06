@@ -1,6 +1,9 @@
 [package]
 name = "ternary-tidelight"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 license = "MIT"
 description = "Temporal rhythm and timing coordination across the ternary fleet"
+
+[dependencies]
+ternary-types = { git = "https://github.com/SuperInstance/ternary-types.git" }

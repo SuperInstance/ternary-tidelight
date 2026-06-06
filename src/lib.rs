@@ -11,21 +11,18 @@ use std::collections::HashMap;
 
 // ── Ternary Value ──────────────────────────────────────────────────────────
 
-/// A balanced ternary digit: Negative (-1), Zero (0), or Positive (+1).
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Ternary {
-    Negative,
-    Zero,
-    Positive,
+/// Canonical ternary type re-exported from `ternary-types`.
+pub use ternary_types::Ternary;
+
+/// Extension trait providing `to_i8()` on [`Ternary`].
+pub trait TernaryExt {
+    /// Convert this ternary value to `i8`.
+    fn to_i8(self) -> i8;
 }
 
-impl Ternary {
-    pub fn to_i8(self) -> i8 {
-        match self {
-            Ternary::Negative => -1,
-            Ternary::Zero => 0,
-            Ternary::Positive => 1,
-        }
+impl TernaryExt for ternary_types::Ternary {
+    fn to_i8(self) -> i8 {
+        i8::from(self)
     }
 }
 
@@ -356,7 +353,7 @@ impl LightCycle {
             let near_day_start = phase.abs_diff(self.day_start) <= 1;
             let near_day_end = phase.abs_diff(self.day_end) <= 1;
             if near_day_start || near_day_end {
-                Ternary::Zero
+                Ternary::Neutral
             } else {
                 Ternary::Negative
             }
@@ -449,7 +446,7 @@ impl SlackTide {
             let near_start = phase.abs_diff(self.start) <= 1;
             let near_end = phase.abs_diff(self.end) <= 1;
             if near_start || near_end {
-                Ternary::Zero
+                Ternary::Neutral
             } else {
                 Ternary::Positive
             }
@@ -562,9 +559,9 @@ mod tests {
     fn test_tide_predictor_observe_and_predict() {
         let mut pred = TidePredictor::new();
         pred.observe("r1", 0, Ternary::Positive);
-        pred.observe("r1", 1, Ternary::Zero);
+        pred.observe("r1", 1, Ternary::Neutral);
         pred.observe("r1", 2, Ternary::Positive);
-        pred.observe("r1", 3, Ternary::Zero);
+        pred.observe("r1", 3, Ternary::Neutral);
         let result = pred.predict("r1", 100);
         assert!(result.is_some());
     }
@@ -579,7 +576,7 @@ mod tests {
     fn test_tide_predictor_observation_count() {
         let mut pred = TidePredictor::new();
         pred.observe("r1", 0, Ternary::Positive);
-        pred.observe("r1", 1, Ternary::Zero);
+        pred.observe("r1", 1, Ternary::Neutral);
         assert_eq!(pred.observation_count("r1"), 2);
     }
 
